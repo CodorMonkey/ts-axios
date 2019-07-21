@@ -55,7 +55,7 @@
  *  }
  * 最终请求的 url 是 /base/get?foo=bar&bar=baz
  */
-import { isDate, isObject } from './util'
+import { isDate, isPlainObject } from './util'
 
 export function buildURL(url: string, params?: any): string {
   // 没有传递参数，直接返回url
@@ -82,7 +82,7 @@ export function buildURL(url: string, params?: any): string {
     }
 
     values.forEach(value => {
-      if (isObject(value)) {
+      if (isPlainObject(value)) {
         //  如果值为对象
         value = JSON.stringify(value)
       } else if (isDate(value)) {
@@ -109,11 +109,18 @@ export function buildURL(url: string, params?: any): string {
 
 function encode(value: any): string {
   return encodeURIComponent(value)
+    // 替换@
     .replace(/%40/g, '@')
+    // 替换:
     .replace(/%3A/gi, ':')
+    // 替换$
     .replace(/%24/g, '$')
+    // 替换,
     .replace(/%2C/gi, ',')
+    // 替换 空格为+，这个比较特殊，W3C规范：URL中的+会变为 空格
     .replace(/%20/g, '+')
+    // 替换[
     .replace(/%5B/gi, '[')
+    // 替换]
     .replace(/%5D/gi, ']')
 }

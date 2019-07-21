@@ -9,6 +9,14 @@ export function isObject(value: any): value is Object {
 }
 
 /**
+ * 是否是对象字面量
+ * @param value
+ */
+export function isPlainObject(value: any): value is Object {
+  return toString.call(value) === '[object Object]'
+}
+
+/**
  * 是否是Date
  * @param value
  */
